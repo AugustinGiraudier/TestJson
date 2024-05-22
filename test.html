@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+
+<script>
+
+    const USER = "AugustinGiraudier";
+    const REPO = "TestJson";
+    const FILE = "test.json";
+
+
+    function onLoad(){
+
+        fetchJsonFile(USER, REPO, FILE).then(json => {
+            console.log(json);
+        });
+
+    }
+
+
+    async function fetchJsonFile(user, repo, file){
+        const resp = await fetch(`https://api.github.com/repos/${user}/${repo}/contents/${file}`);
+        const json = await resp.json();
+        var contents = JSON.parse(atob(json['content']));
+        
+        return contents;
+    }
+
+
+
+</script>
+
+</head>
+<body onload="onLoad()">
+    
+
+
+
+
+</body>
+</html>
