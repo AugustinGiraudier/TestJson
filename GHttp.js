@@ -79,6 +79,40 @@ async function GHttpSetJsonContent() {
     }
 }
 
+async function GHttpCreateFile() {
+
+    if(!GHttpRequireVar(["USER", "REPO", "FILE", "USER_TOKEN"])) return;
+
+    let url = GHttpGetCurrentUrl();
+
+    // Préparer les données pour la mise à jour
+    let createData = {
+        message: GHttpData.COMMIT_MESSAGE == null ? "GHttp Automatic commit" : GHttpData.COMMIT_MESSAGE,
+        content: btoa(""),
+        branch: GHttpData.BRANCH == null ? "main" : GHttpData.BRANCH
+    };
+
+    // Effectuer la requête de mise à jour
+    response = await fetch(url, {
+        method: "PUT",
+        headers: {
+            "Authorization": `token ${GHttpData.USER_TOKEN}`,
+            "Accept": "application/vnd.github.v3+json",
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify(createData)
+    });
+
+    if (response.ok) {
+        console.log("Success !");
+        GHttpCallbacks.SUCCESS ? GHttpCallbacks.SUCCESS() : null;
+    } else {
+        console.error("Impossible to create the file... maybe the content or the token are not valid");
+        GHttpCallbacks.ERROR ? GHttpCallbacks.ERROR() : null;
+        return;
+    }
+}
+
 
 
 

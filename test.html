@@ -12,15 +12,13 @@
 
         GHttpData.USER = "AugustinGiraudier";
         GHttpData.REPO = "TestJson";
-        GHttpData.FILE = "test.json";
-        GHttpData.CONTENT = {"Another test" : "wow !!"};
-        GHttpData.COMMIT_MESSAGE = "Test with Custom commit message";
+        GHttpData.FILE = "test4.json";
+        GHttpData.CONTENT = {"Another test4" : "wow4 !!"};
+        GHttpData.COMMIT_MESSAGE = "Test creating new file";
 
-        GHttpGetJsonContent().then(json => {
-            if(json) console.log(json);
+        GHttpCreateFile().then(() => {
+            GHttpSetJsonContent();
         });
-
-        //GHttpSetJsonContent();
 
         return;
     }
