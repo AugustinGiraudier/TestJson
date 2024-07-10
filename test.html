@@ -4,113 +4,29 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
+    <script src="GHttp.js"></script>
 
 <script>
 
-    const USER = "AugustinGiraudier";
-    const REPO = "TestJson";
-    const FILE = "test.json";
-
-
     function onLoad(){
 
-        fetchJsonFile(USER, REPO, FILE).then(json => {
-            console.log(json);
+        GHttpData.USER = "AugustinGiraudier";
+        GHttpData.REPO = "TestJson";
+        GHttpData.FILE = "test.json";
+        GHttpData.CONTENT = {"Another test" : "wow !!"};
+        GHttpData.COMMIT_MESSAGE = "Test with Custom commit message";
+
+        GHttpGetJsonContent().then(json => {
+            if(json) console.log(json);
         });
 
-        let token = "TOKEN";
-        updateFile(USER, REPO, FILE, token);
+        //GHttpSetJsonContent();
 
         return;
     }
 
 
-    async function fetchJsonFile(user, repo, file){
-        const resp = await fetch(`https://api.github.com/repos/${user}/${repo}/contents/${file}`);
-        const json = await resp.json();
-        var contents = JSON.parse(atob(json['content']));
-        
-        return contents;
-    }
-
-    async function putContentInFile(user, repo, file, token){
-
-        let jsonContent = {'newContent':'this new content rocks !'};
-        let base64Content = btoa(JSON.stringify(jsonContent));
-
-        const resp = await fetch(`https://api.github.com/repos/${user}/${repo}/contents/${file}`,
-            {
-                method: 'PUT',
-                headers: { 
-                    'Accept': 'application/vnd.github+json',
-                    'Authorization': `Bearer ${token}`,
-                    'X-GitHub-Api-Version': '2022-11-28'
-                },
-                body: JSON.stringify({
-                    message:"First Automatic commit test",
-                    committer:{"name":"Augustin Giraudier", "email":"giraudieraugustin@gmail.com"},
-                    content: base64Content
-                })
-            }
-        );
-
-        console.log(resp);
-    }
-
-
-
-
-
-    async function updateFile(user, repo, file, token) {
-
-        let url = `https://api.github.com/repos/${user}/${repo}/contents/${file}`;
-        try {
-            // Obtenir le SHA du fichier existant
-            let response = await fetch(url, {
-                headers: {
-                    "Authorization": `token ${token}`,
-                    "Accept": "application/vnd.github.v3+json"
-                }
-            });
-            
-            if (!response.ok) {
-                throw new Error(`Erreur lors de la récupération du fichier: ${response.status}`);
-            }
-            
-            let fileData = await response.json();
-            let sha = fileData.sha;
-
-            let jsonContent = {'newContent':'this new content rocks !'};
-            let base64Content = btoa(JSON.stringify(jsonContent));
-
-            // Préparer les données pour la mise à jour
-            let updateData = {
-                message: "First Automatic commit test",
-                content: base64Content,
-                sha: sha,
-                branch: "main"
-            };
-
-            // Effectuer la requête de mise à jour
-            response = await fetch(url, {
-                method: "PUT",
-                headers: {
-                    "Authorization": `token ${token}`,
-                    "Accept": "application/vnd.github.v3+json",
-                    "Content-Type": "application/json"
-                },
-                body: JSON.stringify(updateData)
-            });
-
-            if (response.ok) {
-                console.log("Fichier mis à jour avec succès");
-            } else {
-                throw new Error(`Erreur lors de la mise à jour du fichier: ${response.status}`);
-            }
-        } catch (error) {
-            console.error(error.message);
-        }
-    }
+    
 
 </script>
 
