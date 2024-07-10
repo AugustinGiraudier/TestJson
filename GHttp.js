@@ -119,8 +119,8 @@ async function GHttpCreateFile() {
 ////////////////////////////////////////////////////////////////////////////////////////////////
 //
 function AskUserToken(){
-    if(GHttpCallbacks.USER_TOKEN != null){
-        GHttpCallbacks.USER_TOKEN();
+    if(GHttpCallbacks.ASK_USER_TOKEN != null){
+        GHttpCallbacks.ASK_USER_TOKEN();
     }
     else{ // default case
         GHttpData.USER_TOKEN = prompt('Please enter the user token');
