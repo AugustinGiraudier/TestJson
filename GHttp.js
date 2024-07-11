@@ -15,6 +15,23 @@ var GHttpCallbacks = {
 }
 
 //
+async function GHttpIsTokenValid(){
+    if(!GHttpRequireVar(["USER", "REPO", "FILE", "USER_TOKEN"])) return;
+
+    let url = GHttpGetCurrentUrl();
+
+    // Obtenir le SHA du fichier existant
+    let response = await fetch(url, {
+        headers: {
+            "Authorization": `token ${GHttpData.USER_TOKEN}`,
+            "Accept": "application/vnd.github.v3+json"
+        }
+    });
+    
+    return response.ok;
+}
+
+//
 async function GHttpGetJsonContent(){
     
     if(!GHttpRequireVar(["USER", "REPO", "FILE"])) return;
@@ -138,7 +155,8 @@ function GHttpRequireVar(vars){
         if(GHttpData[varName] == null || GHttpData[varName].length == 0){
             if(varName == "USER_TOKEN"){
                 AskUserToken();
-                continue;
+                if(GHttpData[varName] != null && GHttpData[varName].length > 0)
+                    continue;
             }
             console.error("Unset required parameter : " + varName);
             GHttpCallbacks.MISSING_PARAM ? GHttpCallbacks.MISSING_PARAM(varName) : null;

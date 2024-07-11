@@ -12,20 +12,15 @@
 
         GHttpData.USER = "AugustinGiraudier";
         GHttpData.REPO = "TestJson";
-        GHttpData.FILE = "test4.json";
+        GHttpData.FILE = "test.json";
         GHttpData.CONTENT = {"Another test4" : "wow4 !!"};
         GHttpData.COMMIT_MESSAGE = "Test creating new file";
 
-        GHttpCreateFile().then(() => {
-            GHttpSetJsonContent();
-        });
+        GHttpIsTokenValid().then((res) => {console.log(res);});
 
         return;
     }
-
-
     
-
 </script>
 
 </head>
